@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PrepAgent AI - Smart Placement Preparation Agent</title>
+    <meta name="description" content="Prepare for campus placements using Google Gemini AI. Generate personalized HR, technical, coding, and aptitude preparation plans.">
+    <!-- Google Fonts: Outfit and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+
+    <!-- Glowing Background blobs for modern premium aesthetic -->
+    <div class="glow-blob blob-1"></div>
+    <div class="glow-blob blob-2"></div>
+    <div class="glow-blob blob-3"></div>
+
+    <!-- Navigation Header -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" id="nav-logo-link">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span>PrepAgent <span class="accent-text">AI</span></span>
+            </a>
+            
+            <nav class="nav-links">
+                <a href="#prepare" class="nav-link active" data-tab="prepare" id="tab-prepare-link"><i class="fa-solid fa-wand-magic-sparkles"></i> Generate Plan</a>
+                <a href="#history" class="nav-link" data-tab="history" id="tab-history-link"><i class="fa-solid fa-history"></i> History</a>
+            </nav>
+
+            <button class="mobile-toggle" id="mobile-menu-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="main-content">
+        
+        <!-- ================= PREPARE FORM SECTION ================= -->
+        <section id="prepare-section" class="tab-content active">
+            <div class="form-container">
+                <div class="glass-card form-card">
+                    <div class="card-header">
+                        <div class="header-icon"><i class="fa-solid fa-sliders"></i></div>
+                        <div>
+                            <h2>Define Your Preparation Parameters</h2>
+                            <p>Configure details to generate a highly customized AI learning plan.</p>
+                        </div>
+                    </div>
+                    
+                    <form id="prep-form" novalidate>
+                        <div class="form-grid">
+                            <!-- Student Name -->
+                            <div class="form-group full-width">
+                                <label for="studentName"><i class="fa-solid fa-user"></i> Student Name</label>
+                                <input type="text" id="studentName" placeholder="Enter your full name" required minlength="2">
+                                <div class="error-msg" id="name-error"></div>
+                            </div>
+                            
+                            <!-- Job Role -->
+                            <div class="form-group">
+                                <label for="jobRole"><i class="fa-solid fa-briefcase"></i> Job Role</label>
+                                <select id="jobRole" required>
+                                    <option value="" disabled selected>Select Job Role</option>
+                                    <option value="Software Engineer">Software Engineer / SDE</option>
+                                    <option value="Frontend Developer">Frontend Developer</option>
+                                    <option value="Backend Developer">Backend Developer</option>
+                                    <option value="Full Stack Engineer">Full Stack Engineer</option>
+                                    <option value="Data Scientist">Data Scientist</option>
+                                    <option value="Data Engineer">Data Engineer</option>
+                                    <option value="DevOps Engineer">DevOps Engineer</option>
+                                    <option value="Product Manager">Product Manager</option>
+                                    <option value="Quality Assurance Engineer">QA / Testing Engineer</option>
+                                </select>
+                                <div class="error-msg" id="role-error"></div>
+                            </div>
+
+                            <!-- Programming Language -->
+                            <div class="form-group">
+                                <label for="programmingLanguage"><i class="fa-solid fa-code"></i> Programming Language</label>
+                                <select id="programmingLanguage" required>
+                                    <option value="" disabled selected>Select Language</option>
+                                    <option value="Java">Java</option>
+                                    <option value="Python">Python</option>
+                                    <option value="C++">C++</option>
+                                    <option value="JavaScript">JavaScript</option>
+                                    <option value="TypeScript">TypeScript</option>
+                                    <option value="Go">Go</option>
+                                    <option value="SQL">SQL</option>
+                                </select>
+                                <div class="error-msg" id="lang-error"></div>
+                            </div>
+
+                            <!-- Topic -->
+                            <div class="form-group">
+                                <label for="topic"><i class="fa-solid fa-book"></i> Focus Topic / Sub-domain</label>
+                                <input type="text" id="topic" placeholder="e.g. Data Structures, System Design, Concurrency" required>
+                                <div class="error-msg" id="topic-error"></div>
+                            </div>
+
+                            <!-- Difficulty -->
+                            <div class="form-group">
+                                <label for="difficultyLevel"><i class="fa-solid fa-gauge-high"></i> Difficulty Level</label>
+                                <select id="difficultyLevel" required>
+                                    <option value="" disabled selected>Select Difficulty</option>
+                                    <option value="Beginner">Beginner (Core concepts, basic problems)</option>
+                                    <option value="Intermediate">Intermediate (Real-world use-cases, standard coding)</option>
+                                    <option value="Advanced">Advanced (Design patterns, optimizations, complex algorithms)</option>
+                                </select>
+                                <div class="error-msg" id="difficulty-error"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="clear-btn">
+                                <i class="fa-solid fa-trash-can"></i> Clear
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submit-btn">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Preparation Plan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Loader / Wait State -->
+            <div class="loader-overlay hidden" id="generation-loader">
+                <div class="loader-card glass-card">
+                    <div class="spinner">
+                        <div class="spinner-ring"></div>
+                        <i class="fa-solid fa-brain loader-brain"></i>
+                    </div>
+                    <h3>Consulting Gemini 2.5 Flash...</h3>
+                    <p class="loader-status-text">Formulating interview questions, compiling custom coding tests, and mapping your learning roadmap. This can take up to 15 seconds.</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="loader-progress"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= RESULT DISPLAY CONTAINER ================= -->
+            <div class="result-wrapper hidden" id="plan-result-container">
+                <div class="result-banner glass-card">
+                    <div class="banner-info">
+                        <div class="banner-title-row">
+                            <span class="badge" id="res-difficulty">Medium</span>
+                            <h2>Placement Prep Plan for <span id="res-name" class="gradient-text">Student</span></h2>
+                        </div>
+                        <div class="banner-meta-grid">
+                            <span><i class="fa-solid fa-briefcase"></i> <strong>Role:</strong> <span id="res-role">Software Engineer</span></span>
+                            <span><i class="fa-solid fa-code"></i> <strong>Language:</strong> <span id="res-lang">Java</span></span>
+                            <span><i class="fa-solid fa-book"></i> <strong>Topic:</strong> <span id="res-topic">OOP</span></span>
+                            <span><i class="fa-solid fa-calendar"></i> <strong>Generated:</strong> <span id="res-date">Just Now</span></span>
+                        </div>
+                    </div>
+                    <div class="banner-actions">
+                        <button class="btn btn-secondary btn-icon" onclick="printPlan()"><i class="fa-solid fa-print"></i> Print</button>
+                    </div>
+                </div>
+
+                <!-- Tabs to navigate response elements -->
+                <div class="result-tabs-row">
+                    <button class="res-tab-btn active" data-res-tab="hr"><i class="fa-solid fa-user-tie"></i> HR Questions</button>
+                    <button class="res-tab-btn" data-res-tab="tech"><i class="fa-solid fa-laptop-code"></i> Tech Questions</button>
+                    <button class="res-tab-btn" data-res-tab="coding"><i class="fa-solid fa-code"></i> Coding Challenges</button>
+                    <button class="res-tab-btn" data-res-tab="aptitude"><i class="fa-solid fa-brain"></i> Aptitude Test</button>
+                    <button class="res-tab-btn" data-res-tab="roadmap"><i class="fa-solid fa-route"></i> Roadmap & Tips</button>
+                </div>
+
+                <!-- Result Tabs Contents -->
+                <div class="res-tab-contents">
+                    
+                    <!-- HR QUESTIONS -->
+                    <div class="res-tab-content active" id="res-tab-hr">
+                        <div class="card-grid" id="hr-questions-container">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- TECH QUESTIONS -->
+                    <div class="res-tab-content" id="res-tab-tech">
+                        <div class="card-grid" id="tech-questions-container">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- CODING CHALLENGES -->
+                    <div class="res-tab-content" id="res-tab-coding">
+                        <div class="coding-list" id="coding-questions-container">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+
+                    <!-- APTITUDE TEST -->
+                    <div class="res-tab-content" id="res-tab-aptitude">
+                        <div class="aptitude-wrapper">
+                            <div class="quiz-progress-banner">
+                                <span>Aptitude Practice Quiz</span>
+                                <span id="quiz-score-badge" class="badge">Score: 0/5</span>
+                            </div>
+                            <div class="aptitude-list" id="aptitude-questions-container">
+                                <!-- Dynamic Content -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ROADMAP & TIPS -->
+                    <div class="res-tab-content" id="res-tab-roadmap">
+                        <div class="roadmap-grid">
+                            
+                            <!-- Roadmap Timeline -->
+                            <div class="glass-card roadmap-card">
+                                <h3><i class="fa-solid fa-timeline"></i> Custom Learning Roadmap</h3>
+                                <div class="timeline" id="roadmap-timeline-container">
+                                    <!-- Dynamic Timeline Elements -->
+                                </div>
+                            </div>
+
+                            <!-- Preparation Tips -->
+                            <div class="glass-card tips-card">
+                                <h3><i class="fa-solid fa-lightbulb"></i> Tactical Preparation Tips</h3>
+                                <ul class="tips-list" id="tips-container">
+                                    <!-- Dynamic Tips -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PLACEMENT HISTORY SECTION ================= -->
+        <section id="history-section" class="tab-content">
+            <div class="history-container">
+                <div class="history-header">
+                    <h2><i class="fa-solid fa-history"></i> Placement Preparation History</h2>
+                    <p>Access previously generated interview preparation plans and roadmaps.</p>
+                </div>
+                
+                <div class="history-list-grid" id="history-items-grid">
+                    <!-- Dynamic Grid of Past Plans -->
+                    <div class="empty-history-state" id="empty-history">
+                        <i class="fa-solid fa-folder-open empty-icon"></i>
+                        <h3>No History Items Found</h3>
+                        <p>Generate your first placement preparation plan to see it saved here.</p>
+                        <button class="btn btn-primary" onclick="switchTab('prepare')">Create a Plan</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Notification/Toast System -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Script Source -->
+    <script src="app.js"></script>
+</body>
+</html>
